@@ -1,5 +1,5 @@
 <template>
-  <v-card width="300" height="235" elevation="1" class="pa-2 rounded-lg white">
+  <v-card width="290" height="235" elevation="1" class="pa-2 rounded-lg white">
     <v-card-item>
       <v-img 
         :src="photoUrl" 
