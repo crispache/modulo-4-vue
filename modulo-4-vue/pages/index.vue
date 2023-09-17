@@ -1,27 +1,13 @@
 <template>
-  <v-container class="main_box">
+  <main class="main_box">
     <div v-if="isLoading" class="spinner">
       <Spinner />
     </div>
 
-    <v-row v-else>
-      <v-col
-        v-for="user in users"
-        :key="user.id"
-        cols="12"
-        md="4"
-        lg="3"
-        xl="3"
-        xxl="3"
-      >
-        <Card
-          :organization-name="default_organization"
-          :user-name="user.login"
-          :photo-url="user.avatar_url"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+   <template v-else>
+      <UserList :organization-name="organization_name" :users="users" />
+   </template>
+  </main>
 
   <ErrorAlert 
     :is-open="isShowError" 
@@ -34,17 +20,15 @@
 import { githubService } from "~/apis/github";
 import { UserGitHub } from "~/types/User";
 
-const default_organization = "Lemoncode";
 const isShowError = ref<boolean>(false)
 const { getUsers, users, isLoading, errorMessage } = useGithub();
+const organization_name = 'Lemoncode'
 
-
-await getUsers(default_organization);
+await getUsers(organization_name);
 if(errorMessage.value) {
   isShowError.value = true
 }
 
-/* console.log("Users", users); */
 </script>
 
 <style lang="scss" scoped>
@@ -53,6 +37,7 @@ if(errorMessage.value) {
   margin: 0 auto;
   min-height: 90vh;
   background-color: #eceff1;
+  padding: 20px;
 
   .spinner {
     display: flex;
