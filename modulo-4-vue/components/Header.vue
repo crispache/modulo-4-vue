@@ -1,6 +1,6 @@
 <template>
   <header>
-    <v-app-bar :elevation="1" title="App Github" ></v-app-bar>
+    <v-app-bar theme="dark" :elevation="0" title="App Github" ></v-app-bar>
   </header>
 </template>
 

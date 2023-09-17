@@ -1,5 +1,8 @@
 <template>
   <section class="container">
+
+    <UserListSearch :is-loading="isLoading" />
+
     <div class="title">
       <h2>Miembros de {{ organizationName }}</h2>
     </div>
@@ -43,7 +46,7 @@ if (errorMessage.value) {
 
 <style scoped lang="scss">
 .container {
-  background-color: #eceff1;
+ /*  background-color: #eceff1; */
   height: 100vh;
   padding: 20px;
 
