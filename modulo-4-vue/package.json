@@ -19,6 +19,7 @@
     "vuetify": "^3.3.13"
   },
   "dependencies": {
+    "@mdi/font": "^7.2.96",
     "octokit": "^3.1.0"
   }
 }

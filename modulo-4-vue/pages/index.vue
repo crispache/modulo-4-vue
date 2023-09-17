@@ -1,6 +1,5 @@
 <template>
   <v-container class="main_box">
-    
     <div v-if="isLoading" class="spinner">
       <Spinner />
     </div>
@@ -23,6 +22,12 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <ErrorAlert 
+    :is-open="isShowError" 
+    :error-message="errorMessage"
+    @close-alert="isShowError = false">
+  </ErrorAlert>
 </template>
 
 <script setup lang="ts">
@@ -30,9 +35,14 @@ import { githubService } from "~/apis/github";
 import { UserGitHub } from "~/types/User";
 
 const default_organization = "Lemoncode";
+const isShowError = ref<boolean>(false)
+const { getUsers, users, isLoading, errorMessage } = useGithub();
 
-const { getUsers, users, isLoading } = useGithub();
+
 await getUsers(default_organization);
+if(errorMessage.value) {
+  isShowError.value = true
+}
 
 /* console.log("Users", users); */
 </script>
