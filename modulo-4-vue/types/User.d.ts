@@ -5,7 +5,7 @@ export interface UserGitHub {
     id: number;
     node_id: string;
     avatar_url: string;
-    gravatar_id: string;
+    gravatar_id: string | null;
     url: string;
     html_url: string;
     followers_url: string;
@@ -19,4 +19,6 @@ export interface UserGitHub {
     received_events_url: string;
     type: string;
     site_admin: boolean;
+    name?: string | null | undefined;
+    email?: string | null | undefined;
   }

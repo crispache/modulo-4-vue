@@ -1,19 +1,19 @@
 <template>
-    <v-card width="285" height="235" elevation="1" class="pa-2 rounded-lg white">
+    <v-card width="285" height="225" elevation="1" class="pa-2 rounded-lg white">
       <v-card-item>
         <v-img 
           :src="photoUrl" 
           alt="Foto del usuario"
-          height="80" 
-          width="80" 
+          height="70" 
+          width="70" 
           class="mb-2 rounded">
           
           <template #error>
             <v-img
               :src="avatarPhotoUrl" 
               alt="Usuario sin foto"
-              height="80" 
-              width="80"
+              height="70" 
+              width="70"
               class="mb-2"
             ></v-img>
           </template>
@@ -23,7 +23,7 @@
           {{ userName }}
         </v-card-title>
   
-        <v-card-subtitle> Organización: {{ organizationName }} </v-card-subtitle>
+        <v-card-subtitle> Organización: {{ currentSearchField }} </v-card-subtitle>
       </v-card-item>
       <v-card-actions>
         <v-btn color="blue-darken-3" variant="tonal" width="100%">
@@ -34,13 +34,17 @@
   </template>
   
   <script setup lang="ts">
+  import { storeToRefs } from 'pinia';
   import avatarPhotoUrl from '~/assets/images/avatar.png'
-  
+  import { useSearchStore } from '~/composables/store/useSearchStore';
+    
   const props = defineProps<{
-    organizationName: string,
     userName: string;
     photoUrl: string;
   }>();
+
+  const search = useSearchStore();
+  const { currentSearchField } = storeToRefs(search)
   </script>
   
   <style scoped lang="scss"></style>

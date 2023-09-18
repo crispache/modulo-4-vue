@@ -4,22 +4,33 @@
     <UserListSearch :is-loading="isLoading" />
 
     <div class="title">
-      <h2>Miembros de {{ organizationName }}</h2>
+      <h2>Miembros de {{ currentSearchField }}</h2>
     </div>
 
     <div class="spinner" v-if="isLoading">
       <Spinner />
     </div>
 
-    <div class="list" v-else>
-      <UserListItem
+    <template v-else>
+      <div class="list">
+        <UserListItem
         v-for="user in users"
         :key="user.id"
-        organization-name="Lemoncode"
         :user-name="user.login"
         :photo-url="user.avatar_url"
       />
-    </div>
+      </div>
+    
+
+      <div class="pagination">
+        <v-pagination
+          v-model="currentPage"
+          :length="15"
+          :total-visible="7"
+          @update:model-value="updatePage()"
+        ></v-pagination>
+      </div>
+    </template>
   </section>
   <!-- 
   <ErrorAlert 
@@ -30,18 +41,35 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { githubService } from "~/apis/github";
+import { useSearchStore } from "~/composables/store/useSearchStore";
 import { UserGitHub } from "~/types/User";
 
-const organizationName = "Lemoncode";
+
 const isShowError = ref<boolean>(false);
-const { getUsers, users, isLoading, errorMessage } = useGithub();
+const { getUsers, users, isLoading, errorMessage, currentPage } = useGithub();
+const search = useSearchStore();
+const { currentSearchField, searchField } = storeToRefs(search)
 
-await getUsers(organizationName);
 
+onMounted( async () => {
+  await getUsers(currentSearchField.value, currentPage.value);
+})
+
+// 
 if (errorMessage.value) {
   isShowError.value = true;
 }
+
+const updatePage = async () => {
+  await getUsers(currentSearchField.value, currentPage.value);
+}
+
+
+watch( searchField, async () => {
+  await getUsers(currentSearchField.value, currentPage.value);
+})
 </script>
 
 <style scoped lang="scss">
@@ -58,6 +86,11 @@ if (errorMessage.value) {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+  }
+
+  .pagination {
+    margin: 0 auto;
+    padding: 20px 0px;
   }
 
   .spinner {

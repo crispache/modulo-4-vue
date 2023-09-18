@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="5">
         <v-text-field
+          v-model="organizationName"
           label="Nombre de la organización"
           placeholder="Ej: Lemoncode"
           variant="outlined"
@@ -15,6 +16,7 @@
           width="180"
           variant="flat"
           color="indigo-darken-3"
+          @click="searchMembersOrganization()"
         >
           Buscar
         </v-btn>
@@ -24,9 +26,34 @@
 </template>
 
 <script setup lang="ts">
+import { useSearchStore } from '~/composables/store/useSearchStore';
+
 const props = defineProps<{
   isLoading: boolean;
 }>();
+
+const organizationName = ref<string>()
+const { currentSearchField, updateSearchField } = useSearchStore();
+
+onMounted( () => {
+  if(currentSearchField) {
+    console.log(currentSearchField)
+    organizationName.value = currentSearchField
+  }
+})
+
+
+const searchMembersOrganization = () => {
+  console.log('search', organizationName.value)
+  if(organizationName.value) {
+    updateSearchField(organizationName.value)
+  } else {
+    // mostrar aviso de que introduzca algo
+  }
+}
+
+
+
 </script>
 
 <style scoped lang="scss">
