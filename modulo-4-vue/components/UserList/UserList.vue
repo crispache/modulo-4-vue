@@ -1,6 +1,5 @@
 <template>
   <section class="container">
-
     <UserListSearch :is-loading="isLoading" />
 
     <div class="title">
@@ -12,69 +11,70 @@
     </div>
 
     <template v-else>
-      <div class="list">
-        <UserListItem
-        v-for="user in users"
-        :key="user.id"
-        :user-name="user.login"
-        :photo-url="user.avatar_url"
-      />
-      </div>
-    
+      <template v-if="users.length === 0">
+        <user-list-empty />
+      </template>
 
-      <div class="pagination">
-        <v-pagination
-          v-model="currentPage"
-          :length="15"
-          :total-visible="7"
-          @update:model-value="updatePage()"
-        ></v-pagination>
-      </div>
+      <template v-else>
+        <div class="list">
+          <UserListItem
+            v-for="user in users"
+            :key="user.id"
+            :user-name="user.login"
+            :photo-url="user.avatar_url"
+          />
+        </div>
+
+        <div class="pagination">
+          <v-pagination
+            v-model="currentPage"
+            :length="totalPages"
+            :total-visible="7"
+            @update:model-value="updatePage()"
+          ></v-pagination>
+        </div>
+      </template>
     </template>
   </section>
-  <!-- 
-  <ErrorAlert 
-    :is-open="isShowError" 
+
+  <ErrorAlert
+    :is-open="isShowError"
     :error-message="errorMessage"
-    @close-alert="isShowError = false">
-  </ErrorAlert> -->
+    @close-alert="isShowError = false"
+  >
+  </ErrorAlert>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { githubService } from "~/apis/github";
 import { useSearchStore } from "~/composables/store/useSearchStore";
-import { UserGitHub } from "~/types/User";
-
 
 const isShowError = ref<boolean>(false);
-const { getUsers, users, isLoading, errorMessage, currentPage } = useGithub();
+const { getUsers, users, isLoading, errorMessage, currentPage, totalPages } = useGithub();
 const search = useSearchStore();
-const { currentSearchField, searchField } = storeToRefs(search)
+const { currentSearchField, searchField } = storeToRefs(search);
 
-
-onMounted( async () => {
+onMounted(async () => {
   await getUsers(currentSearchField.value, currentPage.value);
-})
+});
 
-// 
-if (errorMessage.value) {
-  isShowError.value = true;
-}
+watch(errorMessage, () => {
+  if (errorMessage.value) {
+    isShowError.value = true;
+  }
+});
 
 const updatePage = async () => {
   await getUsers(currentSearchField.value, currentPage.value);
-}
+};
 
-
-watch( searchField, async () => {
+watch(searchField, async () => {
   await getUsers(currentSearchField.value, currentPage.value);
-})
+});
 </script>
 
 <style scoped lang="scss">
 .container {
- /*  background-color: #eceff1; */
   height: 100vh;
   padding: 20px;
 
@@ -97,7 +97,7 @@ watch( searchField, async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 400px;
   }
 }
 </style>

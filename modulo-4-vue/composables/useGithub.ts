@@ -5,6 +5,7 @@ export function useGithub() {
 
     const users = ref<UserGitHub[]>([]);
     const currentPage = ref<number>(1);
+    const totalPages = ref<number>(0);
     const errorMessage = ref<string>('');
     const isLoading = ref<boolean>(false);
 
@@ -14,13 +15,14 @@ export function useGithub() {
             isLoading.value = true;
             errorMessage.value = '';
             
-            const { data, error } = await githubService.getUsers(organizationName, currentPage);
+            const { data, pages, error } = await githubService.getUsers(organizationName, currentPage);
           
             if(error) {
                 errorMessage.value = error
             }
 
             users.value = [...data];
+            totalPages.value = pages;
 
         } catch (err) {
             users.value = [];
@@ -35,6 +37,7 @@ export function useGithub() {
         // props
         users: readonly(users),
         currentPage,
+        totalPages,
         errorMessage,
         isLoading,
 
