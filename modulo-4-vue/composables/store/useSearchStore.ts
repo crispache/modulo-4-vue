@@ -1,6 +1,5 @@
 import { ListUserInfo } from "~/types/User";
 
-
 export const useSearchStore = defineStore('search', () => {
 
     const searchField = ref<string>('Lemoncode');
@@ -53,4 +52,4 @@ export const useSearchStore = defineStore('search', () => {
         updateTotalPages,
     }
 
-})
+},{ persist: true})

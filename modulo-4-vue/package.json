@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
+    "@pinia-plugin-persistedstate/nuxt": "^1.1.2",
     "nuxt": "^3.7.3",
     "sass": "^1.67.0",
     "vuetify": "^3.3.13"
