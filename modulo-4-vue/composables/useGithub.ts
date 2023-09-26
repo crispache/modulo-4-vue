@@ -1,15 +1,19 @@
 import { ListUserInfo, UserDetails } from "~/types/User";
 import { githubService } from '~/apis/github';
 import { useSearchStore } from "./store/useSearchStore";
+import { storeToRefs } from "pinia";
 
 export function useGithub() {
 
-    const { updateTotalPages, updateUsersList , currentUsersList, currentPage: currentPageStore, totalPages: totalPagesStore  } = useSearchStore();
+    // Store
+    const searchStore = useSearchStore();
+    const { currentUsersList, currentPage: currentPageStore, totalPages: totalPagesStore } = storeToRefs(searchStore); 
+    const { updateTotalPages, updateUsersList } = useSearchStore();
 
     const users = ref<ListUserInfo[]>(currentUsersList.value);
     const userDetails = ref<UserDetails>();
-    const currentPage = ref<number>(currentPageStore);
-    const totalPages = ref<number>(totalPagesStore);
+    const currentPage = ref<number>(currentPageStore.value);
+    const totalPages = ref<number>(totalPagesStore.value);
     const errorMessage = ref<string>('');
     const isLoading = ref<boolean>(false);
    

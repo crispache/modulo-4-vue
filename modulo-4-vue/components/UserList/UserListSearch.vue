@@ -46,13 +46,16 @@ const emit = defineEmits<{
   (e: "update-list"): void;
 }>();
 
-
-
 const organizationName = ref<string>();
 const isShowError = ref<boolean>(false);
-const errorMessage = ref<string>('Introduzca un nombre de una organización')
-const { currentSearchField, updateSearchField } = useSearchStore();
-
+const errorMessage = ref<string>("Introduzca un nombre de una organización");
+const {
+  currentSearchField,
+  updateSearchField,
+  updateUsersList,
+  updatePage,
+  updateTotalPages,
+} = useSearchStore();
 
 onMounted(() => {
   if (currentSearchField) {
@@ -60,19 +63,24 @@ onMounted(() => {
   }
 });
 
-
 // Methods
 const searchMembersOrganization = (event: Event) => {
   event.preventDefault();
-  
+
   if (organizationName.value) {
-    updateSearchField(organizationName.value);
     emit("update-list");
   } else {
     isShowError.value = true;
-    // TODO: RESET TODO, el listado [], page 1, totalPages ...
+    resetListWithDefaultValues();
   }
+};
 
+
+const resetListWithDefaultValues = (): void => {
+  updateSearchField(""); // todo: se podría poner Lemoncode por defecto aqui
+  updateUsersList([]);
+  updatePage(1);
+  updateTotalPages(0);
 };
 </script>
 
