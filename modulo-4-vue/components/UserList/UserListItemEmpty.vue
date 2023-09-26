@@ -3,8 +3,7 @@
     <div class="container">
         <div>
             <v-img :src="Empty" alt="Sin datos" height="210" width="280"></v-img>
-            <p> No se han encontrado resultados  </p>
-            <p> Pruebe con otro nombre </p>
+            <p> No se ha podido encontrar resultados </p>
         </div>
     </div>
 </template>

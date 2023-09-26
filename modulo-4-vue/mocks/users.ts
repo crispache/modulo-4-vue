@@ -1,6 +1,6 @@
-import { UserGitHub } from "~/types/User";
+import { ListUserInfo } from "~/types/User";
 
-export const USERS_MOCKS: UserGitHub[] = 
+export const USERS_MOCKS: ListUserInfo[] = 
     [
         {
             "login": "User1", // nombre usuario

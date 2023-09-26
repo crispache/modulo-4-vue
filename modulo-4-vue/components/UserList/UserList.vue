@@ -30,7 +30,7 @@
             v-model="currentPage"
             :length="totalPages"
             :total-visible="7"
-            @update:model-value="updatePage()"
+            @update:model-value="updatePagination()"
           ></v-pagination>
         </div>
       </template>
@@ -52,9 +52,37 @@ import { useSearchStore } from "~/composables/store/useSearchStore";
 const isShowError = ref<boolean>(false);
 const { getUsers, users, isLoading, errorMessage, currentPage, totalPages } = useGithub();
 const search = useSearchStore();
-const { currentSearchField, searchField } = storeToRefs(search);
+const { updatePage } = useSearchStore();
+const { currentSearchField, searchField, currentUsersList } = storeToRefs(search);
 
 onMounted(async () => {
+  console.log('actual buscador ', currentSearchField.value)
+/*   console.log('montar listado', currentUsersList.value ) */
+ /*  if(!currentUsersList.value) { */
+  // await getUsers(currentSearchField.value, currentPage.value);
+  /* } */
+
+  if(currentUsersList.value) {
+    // valores
+    //pagina
+    // total página
+
+    
+  }
+  
+
+});
+
+
+
+const updatePagination = async () => {
+  updatePage(currentPage.value);
+  await getUsers(currentSearchField.value, currentPage.value);
+};
+
+
+
+watch(searchField, async () => {
   await getUsers(currentSearchField.value, currentPage.value);
 });
 
@@ -63,19 +91,11 @@ watch(errorMessage, () => {
     isShowError.value = true;
   }
 });
-
-const updatePage = async () => {
-  await getUsers(currentSearchField.value, currentPage.value);
-};
-
-watch(searchField, async () => {
-  await getUsers(currentSearchField.value, currentPage.value);
-});
 </script>
 
 <style scoped lang="scss">
 .container {
-  height: 100vh;
+  height: 50vh;
   padding: 20px;
 
   .title {

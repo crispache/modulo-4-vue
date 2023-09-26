@@ -37,18 +37,16 @@ const { currentSearchField, updateSearchField } = useSearchStore();
 
 onMounted( () => {
   if(currentSearchField) {
-    console.log(currentSearchField)
     organizationName.value = currentSearchField
   }
 })
 
 
 const searchMembersOrganization = () => {
-  console.log('search', organizationName.value)
   if(organizationName.value) {
     updateSearchField(organizationName.value)
   } else {
-    // mostrar aviso de que introduzca algo
+    // todo:  mostrar aviso de que introduzca algo
   }
 }
 

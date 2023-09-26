@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+
+# Provisional 
+apis/config.ts

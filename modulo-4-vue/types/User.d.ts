@@ -1,6 +1,6 @@
 
 
-export interface UserGitHub {
+export interface ListUserInfo {
     login: string;
     id: number;
     node_id: string;
@@ -21,4 +21,23 @@ export interface UserGitHub {
     site_admin: boolean;
     name?: string | null | undefined;
     email?: string | null | undefined;
-  }
+}
+
+export interface UserDetails {
+  name: string | null | undefined;
+  login: string;
+  avatar_url: string;
+ 
+  public_repos: number;
+  followers: number;
+  following: number;
+
+  company: string | null | undefined;
+  email: string | null | undefined;
+
+  html_url: string;
+  repos_url: string;
+
+  bio: string | null | undefined;
+  location: string | null | undefined;
+}
