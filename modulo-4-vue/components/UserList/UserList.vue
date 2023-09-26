@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-    <UserListSearch :is-loading="isLoading" />
+    <UserListSearch :is-loading="isLoading" @update-list="updateList()" />
 
     <div class="title">
       <h2>Miembros de {{ currentSearchField }}</h2>
@@ -53,26 +53,7 @@ const isShowError = ref<boolean>(false);
 const { getUsers, users, isLoading, errorMessage, currentPage, totalPages } = useGithub();
 const search = useSearchStore();
 const { updatePage } = useSearchStore();
-const { currentSearchField, searchField, currentUsersList } = storeToRefs(search);
-
-onMounted(async () => {
-  console.log('actual buscador ', currentSearchField.value)
-/*   console.log('montar listado', currentUsersList.value ) */
- /*  if(!currentUsersList.value) { */
-  // await getUsers(currentSearchField.value, currentPage.value);
-  /* } */
-
-  if(currentUsersList.value) {
-    // valores
-    //pagina
-    // total página
-
-    
-  }
-  
-
-});
-
+const { currentSearchField } = storeToRefs(search);
 
 
 const updatePagination = async () => {
@@ -82,9 +63,11 @@ const updatePagination = async () => {
 
 
 
-watch(searchField, async () => {
-  await getUsers(currentSearchField.value, currentPage.value);
-});
+ const updateList = async () => {
+  updatePage(1);
+  await getUsers(currentSearchField.value, 1);
+};
+
 
 watch(errorMessage, () => {
   if (errorMessage.value) {
