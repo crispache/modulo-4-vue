@@ -11,7 +11,7 @@ export function useGithub() {
     const { updateTotalPages, updateUsersList } = useSearchStore();
 
     const users = ref<ListUserInfo[]>(currentUsersList.value);
-    const userDetails = ref<UserDetails>();
+    const userDetails = ref<UserDetails | undefined>(undefined);
     const currentPage = ref<number>(currentPageStore.value);
     const totalPages = ref<number>(totalPagesStore.value);
     const errorMessage = ref<string>('');
@@ -33,14 +33,13 @@ export function useGithub() {
             users.value = [...data];
             updateUsersList(data);
 
-            // Todo -> review
+            // TODO: -> review
             if (pages) {
                 totalPages.value = pages;
                 updateTotalPages(pages)
-            } /* else {
-                updateTotalPages(1)
-            }          
- */
+            } 
+
+
         } catch (err) {
             users.value = [];
             totalPages.value = 0;
@@ -62,11 +61,9 @@ export function useGithub() {
             if(error) {
                 errorMessage.value = error
             }
-
-            userDetails.value = {...data};
-
+            userDetails.value = data;
         } catch (err) {
-            userDetails.value = {}
+            userDetails.value = undefined;
             errorMessage.value = 'Se ha producido un error al cargar los datos';
         } finally {
             isLoading.value = false;

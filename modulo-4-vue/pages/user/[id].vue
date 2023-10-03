@@ -15,9 +15,8 @@
     </template>
 
     <template v-else>
-
       <template v-if="errorMessage">
-        <user-list-item-empty/>
+        <user-list-item-empty />
       </template>
 
       <template v-else>
@@ -42,7 +41,7 @@
 
           <div class="main-info">
             <div class="d-flex">
-              <h2>{{ userDetails?.name }} - {{ userDetails?.login }}</h2>
+              <h2> {{ getUserName }} </h2>
               <v-btn
                 size="small"
                 icon="mdi-open-in-new"
@@ -52,7 +51,7 @@
             </div>
 
             <v-chip size="small" color="primary" text-color="white">
-              {{ userDetails?.company }}
+              {{ getOrganizationName }}
             </v-chip>
 
             <div class="mt-2" style="font-size: 14px">
@@ -99,26 +98,41 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import avatarPhotoUrl from "~/assets/images/avatar.png";
-import { UserDetails } from "~/types/User";
+import { useSearchStore } from "~/composables/store/useSearchStore";
+
+
 const route = useRoute();
 const isShowError = ref<boolean>(false);
-/* const DEFAULT_USER_DATA: UserDetails = {
-  login: '',
-  avatar_url: '',
-  html_url: '',
-  repos_url: '',
-  name: '',
-  company: '',
-  location: '',
-  email: '',
-  bio: '',
-  public_repos: 0,
-  followers: 0,
-  following: 0,
-} */
-
 const { userDetails, getUserDetail, isLoading, errorMessage } = useGithub();
+
+const search = useSearchStore();
+const { currentSearchField } = storeToRefs(search);
+
+
+
+const getUserName = computed(() => {
+  if (userDetails.value?.name && userDetails.value?.login) {
+    return `${userDetails.value.name} - ${userDetails.value.login}`;
+  }
+
+  if (userDetails.value?.login) {
+    return `${userDetails.value.login}`;
+  }
+
+  return '-'
+});
+
+
+
+const getOrganizationName = computed(() => {
+  if (userDetails.value?.company) {
+    return userDetails.value.company;
+  } else {
+    return currentSearchField.value;
+  }
+});
 
 const openBrowserTabToShowGithubRepository = (): void => {
   window.open(userDetails.value?.html_url);

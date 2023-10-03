@@ -29,7 +29,7 @@
     </v-card-item>
     <v-card-actions>
       <NuxtLink :to="`/user/${userName}`">
-        <v-btn color="blue-darken-3" variant="tonal" width="100%">
+        <v-btn color="blue-darken-3" variant="tonal" width="255" height="40">
           Ver más
         </v-btn>
       </NuxtLink>
