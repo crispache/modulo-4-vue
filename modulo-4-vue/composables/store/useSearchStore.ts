@@ -9,7 +9,7 @@ export const useSearchStore = defineStore('search', () => {
 
 
     const currentSearchField = computed(() => searchField.value )
-    const currentUsersList = computed(() => usersList )
+    const currentUsersList = computed(() => usersList.value )
     const currentPage = computed(() => page.value )
     const currentTotalPages = computed(() => totalPages.value )
 
@@ -52,4 +52,4 @@ export const useSearchStore = defineStore('search', () => {
         updateTotalPages,
     }
 
-},{ persist: true})
+},{ persist: false})

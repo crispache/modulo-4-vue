@@ -3,7 +3,7 @@
     <UserListSearch :is-loading="isLoading" @update-list="updateList()" />
 
     <div class="title">
-      <h2>Miembros de {{ currentSearchField }}</h2>
+      <h2 v-if="currentSearchField"> Miembros de {{ currentSearchField }} </h2>
     </div>
 
     <div class="spinner" v-if="isLoading">
@@ -11,14 +11,14 @@
     </div>
 
     <template v-else>
-      <template v-if="users.length === 0">
+      <template v-if="currentUsersList.length === 0">
         <user-list-empty />
       </template>
 
       <template v-else>
         <div class="list">
           <UserListItem
-            v-for="user in users"
+            v-for="user in currentUsersList"
             :key="user.id"
             :user-name="user.login"
             :photo-url="user.avatar_url"
@@ -49,29 +49,37 @@
 import { storeToRefs } from "pinia";
 import { useSearchStore } from "~/composables/store/useSearchStore";
 
-const isShowError = ref<boolean>(false);
-const { getUsers, users, isLoading, errorMessage, currentPage, totalPages } = useGithub();
+const { getUsers, users, isLoading, errorMessage, currentPage } = useGithub();
 const search = useSearchStore();
-const { updatePage } = useSearchStore();
-const { currentSearchField } = storeToRefs(search);
+const { updatePage, updateSearchField, updateUsersList, updateTotalPages } = useSearchStore();
+const { currentSearchField, currentUsersList, totalPages, currentPage: currentPageStore } = storeToRefs(search);
+
+const isShowError = ref<boolean>(false);
 
 
+// methods
 const updatePagination = async () => {
   updatePage(currentPage.value);
   await getUsers(currentSearchField.value, currentPage.value);
 };
 
-
-
- const updateList = async () => {
+const updateList = async () => {
   updatePage(1);
   await getUsers(currentSearchField.value, 1);
 };
 
+const resetListWithDefaultValues = (): void => {
+  updateUsersList([]);
+  updatePage(1);
+  updateTotalPages(0);
+};
 
+
+// watch
 watch(errorMessage, () => {
   if (errorMessage.value) {
     isShowError.value = true;
+    resetListWithDefaultValues();
   }
 });
 </script>
@@ -83,6 +91,7 @@ watch(errorMessage, () => {
 
   .title {
     margin-bottom: 15px;
+    height: 50px;
   }
 
   .list {

@@ -1,6 +1,6 @@
 <template>
   <div class="search-box">
-    <form @submit="searchMembersOrganization">
+    <form @submit.prevent>
       <v-row>
         <v-col cols="5">
           <v-text-field
@@ -12,13 +12,13 @@
         </v-col>
         <v-col cols="3">
           <v-btn
-            type="submit"
+            type="button"
             :loading="isLoading"
             height="56"
             width="180"
             variant="flat"
             color="indigo-darken-3"
-            @click="searchMembersOrganization"
+            @click="searchMembersOrganization()"
           >
             Buscar
           </v-btn>
@@ -64,10 +64,9 @@ onMounted(() => {
 });
 
 // Methods
-const searchMembersOrganization = (event: Event) => {
-  event.preventDefault();
-
+const searchMembersOrganization = () => {
   if (organizationName.value) {
+    updateSearchField(organizationName.value)
     emit("update-list");
   } else {
     isShowError.value = true;
@@ -77,7 +76,7 @@ const searchMembersOrganization = (event: Event) => {
 
 
 const resetListWithDefaultValues = (): void => {
-  updateSearchField(""); // todo: se podría poner Lemoncode por defecto aqui
+  updateSearchField("");
   updateUsersList([]);
   updatePage(1);
   updateTotalPages(0);
