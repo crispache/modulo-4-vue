@@ -27,7 +27,7 @@
 
         <div class="pagination">
           <v-pagination
-            v-model="currentPage"
+            v-model:model-value="currentPage"
             :length="totalPages"
             :total-visible="7"
             @update:model-value="updatePagination()"
@@ -49,13 +49,17 @@
 import { storeToRefs } from "pinia";
 import { useSearchStore } from "~/composables/store/useSearchStore";
 
-const { getUsers, users, isLoading, errorMessage, currentPage } = useGithub();
+const { getUsers, users, isLoading, errorMessage } = useGithub();
 const search = useSearchStore();
 const { updatePage, updateSearchField, updateUsersList, updateTotalPages } = useSearchStore();
 const { currentSearchField, currentUsersList, totalPages, currentPage: currentPageStore } = storeToRefs(search);
 
 const isShowError = ref<boolean>(false);
+const currentPage = ref<number>(1);
 
+onMounted( ()=> {
+  currentPage.value = currentPageStore.value
+});
 
 // methods
 const updatePagination = async () => {
@@ -64,13 +68,15 @@ const updatePagination = async () => {
 };
 
 const updateList = async () => {
-  updatePage(1);
-  await getUsers(currentSearchField.value, 1);
+  currentPage.value = 1;
+  updatePage(currentPage.value);
+  await getUsers(currentSearchField.value, currentPage.value);
 };
 
 const resetListWithDefaultValues = (): void => {
   updateUsersList([]);
-  updatePage(1);
+  currentPage.value = 1;
+  updatePage(currentPage.value);
   updateTotalPages(0);
 };
 
