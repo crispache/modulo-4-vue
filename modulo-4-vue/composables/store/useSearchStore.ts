@@ -52,4 +52,4 @@ export const useSearchStore = defineStore('search', () => {
         updateTotalPages,
     }
 
-},{ persist: false})
+},{ persist: false}) // TODO: REVISAR

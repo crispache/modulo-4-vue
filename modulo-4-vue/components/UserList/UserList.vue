@@ -51,14 +51,16 @@ import { useSearchStore } from "~/composables/store/useSearchStore";
 
 const { getUsers, users, isLoading, errorMessage } = useGithub();
 const search = useSearchStore();
-const { updatePage, updateSearchField, updateUsersList, updateTotalPages } = useSearchStore();
-const { currentSearchField, currentUsersList, totalPages, currentPage: currentPageStore } = storeToRefs(search);
+const { updatePage, updateSearchField, updateUsersList, updateTotalPages, totalPages } = useSearchStore();
+const { currentSearchField, currentUsersList, totalPages: totalPagesStore, currentPage: currentPageStore } = storeToRefs(search);
 
 const isShowError = ref<boolean>(false);
 const currentPage = ref<number>(1);
+/* const totalPages = ref<number>() */
 
 onMounted( ()=> {
-  currentPage.value = currentPageStore.value
+  currentPage.value = currentPageStore.value;
+ /*  totalPages.value = totalPagesStore.value; */
 });
 
 // methods

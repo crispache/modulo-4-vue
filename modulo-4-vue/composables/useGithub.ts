@@ -8,7 +8,7 @@ export function useGithub() {
     // Store
     const searchStore = useSearchStore();
     const { currentUsersList, currentPage: currentPageStore, totalPages: totalPagesStore } = storeToRefs(searchStore); 
-    const { updateTotalPages, updateUsersList } = useSearchStore();
+    const { updateTotalPages, updateUsersList, updatePage } = useSearchStore();
 
     const users = ref<ListUserInfo[]>(currentUsersList.value);
     const userDetails = ref<UserDetails | undefined>(undefined);
@@ -23,6 +23,9 @@ export function useGithub() {
 
             isLoading.value = true;
             errorMessage.value = '';
+
+            // TODO: ACTUALIZAR TOTAL PAGE Y ACTUALIZAR CURRENTPAGE
+            updatePage(currentPage);
             
             const { data, pages, error } = await githubService.getUsers(organizationName, currentPage);
           
@@ -75,8 +78,10 @@ export function useGithub() {
 
     return {
         // props
-        users: readonly(users),
-        userDetails: readonly(userDetails),
+       /*  users: readonly(users),
+        userDetails: readonly(userDetails), */
+        users,
+        userDetails,
         currentPage,
         totalPages,
         errorMessage,
