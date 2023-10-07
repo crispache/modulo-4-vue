@@ -1,5 +1,5 @@
 import { ListUserInfo, UserDetails } from "~/types/User";
-import { githubService } from '~/apis/github';
+import { githubService } from '~/services/github';
 import { useSearchStore } from "./store/useSearchStore";
 import { storeToRefs } from "pinia";
 
@@ -10,10 +10,15 @@ export function useGithub() {
     const { currentUsersList, currentPage: currentPageStore, totalPages: totalPagesStore } = storeToRefs(searchStore); 
     const { updateTotalPages, updateUsersList, updatePage, updateSearchField } = useSearchStore();
 
+    // Users
     const users = ref<ListUserInfo[]>(currentUsersList.value);
     const userDetails = ref<UserDetails | undefined>(undefined);
+
+    // List
     const currentPage = ref<number>(currentPageStore.value);
     const totalPages = ref<number>(totalPagesStore.value);
+
+    // Others
     const errorMessage = ref<string>('');
     const isLoading = ref<boolean>(false);
    
@@ -23,10 +28,8 @@ export function useGithub() {
 
             isLoading.value = true;
             errorMessage.value = '';
-
-            // TODO: ACTUALIZAR TOTAL PAGE Y ACTUALIZAR CURRENTPAGE
-            updatePage(currentPage);
             updateSearchField(organizationName);
+            updatePage(currentPage);
             
             const { data, pages, error } = await githubService.getUsers(organizationName, currentPage);
           
@@ -37,10 +40,9 @@ export function useGithub() {
             users.value = [...data];
             updateUsersList(data);
 
-            // TODO: -> review
             if (pages) {
                 totalPages.value = pages;
-                updateTotalPages(pages)
+                updateTotalPages(pages);
             } 
 
         } catch (err) {
@@ -78,8 +80,6 @@ export function useGithub() {
 
     return {
         // props
-       /*  users: readonly(users),
-        userDetails: readonly(userDetails), */
         users,
         userDetails,
         currentPage,

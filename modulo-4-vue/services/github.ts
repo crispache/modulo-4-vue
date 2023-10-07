@@ -1,8 +1,6 @@
 import { ListUserInfo, UserDetails } from "~/types/User";
 import { octokit } from "./config";
-import { USERS_MOCKS } from '@/mocks/users'
 import { getTotalPagesApiGithub } from "~/utils/getPaginationApiGithub";
-import { USER_MOCK } from "~/mocks/userDetails";
 
 
 interface UsersListResponse {
@@ -41,8 +39,6 @@ export const githubService = {
                   }
               }
 
-
-            /*  return { data: USERS_MOCKS as ListUserInfo[], pages: 1, } */
             if(currentPage === 1) {
                 return {
                     data,

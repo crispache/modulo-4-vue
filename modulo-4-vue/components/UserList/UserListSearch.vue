@@ -49,13 +49,7 @@ const emit = defineEmits<{
 const organizationName = ref<string>();
 const isShowError = ref<boolean>(false);
 const errorMessage = ref<string>("Introduzca un nombre de una organización");
-const {
-  currentSearchField,
-  updateSearchField,
-  updateUsersList,
-  updatePage,
-  updateTotalPages,
-} = useSearchStore();
+const { currentSearchField } = useSearchStore();
 
 onMounted(() => {
   if (currentSearchField) {
@@ -66,21 +60,12 @@ onMounted(() => {
 // Methods
 const searchMembersOrganization = () => {
   if (organizationName.value) {
-   // updateSearchField(organizationName.value); //* TODO: SE PUEDE composable
     emit("update-list", organizationName.value);
   } else {
     isShowError.value = true;
-  /*   resetListWithDefaultValues(); */ // todo: revisar
   }
 };
 
-
-/* const resetListWithDefaultValues = (): void => {
-  updateSearchField("");
-  updateUsersList([]);
-  updatePage(1);
-  updateTotalPages(0);
-}; */
 </script>
 
 <style scoped lang="scss">
