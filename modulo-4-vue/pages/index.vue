@@ -31,15 +31,19 @@ import { useSearchStore } from "~/composables/store/useSearchStore";
 // Composables & Stores
 const { getUsers, users, isLoading, errorMessage } = useGithub();
 const searchStore = useSearchStore();
-const { currentSearchField, currentPage, totalPages } = storeToRefs(searchStore); 
-
+const { currentSearchField, currentPage, totalPages, currentIsDefaultStateLoaded } = storeToRefs(searchStore); 
+const { updateDefaultState } = useSearchStore()
 const isShowError = ref<boolean>(false);
 
 
+onMounted( async () => {
+  if(!currentIsDefaultStateLoaded.value) {
+    updateDefaultState(true);
+    await getUsers(currentSearchField.value, currentPage.value); 
+  }
+})
 
 // methods
-/* await getUsers(currentSearchField.value, currentPage.value); */
-
 const updatePagination = async (page: number) => {
   await getUsers(currentSearchField.value, page);
 };
