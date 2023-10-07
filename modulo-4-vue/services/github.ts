@@ -88,7 +88,6 @@ export const githubService = {
                 html_url: data.html_url,
                 repos_url: data.repos_url,
                 name: data.name,
-                company: data.company,
                 location: data.location,
                 email: data.email,
                 bio: data.bio,
@@ -102,12 +101,12 @@ export const githubService = {
         } catch (err) {
             if (err instanceof Error && 'message' in err) {
                 return {
-                    data: {},
+                    data: undefined,
                     error: err.message
                 }
             } else {
                 return {
-                    data: {},
+                    data: undefined,
                     error: 'Se ha producido un error al cargar los datos.'
                 }
             }

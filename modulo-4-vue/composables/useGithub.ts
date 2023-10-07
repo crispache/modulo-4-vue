@@ -21,6 +21,7 @@ export function useGithub() {
     // Others
     const errorMessage = ref<string>('');
     const isLoading = ref<boolean>(false);
+    const isLoadingUserDetails = ref<boolean>(true);
    
 
     const getUsers = async (organizationName: string, currentPage: number ) => {
@@ -58,7 +59,7 @@ export function useGithub() {
     const getUserDetail = async (userName: string) => {
         try {
 
-            isLoading.value = true;
+            isLoadingUserDetails.value = true;
             errorMessage.value = '';
             
             const { data, error } = await githubService.getUserDetail(userName);
@@ -71,7 +72,7 @@ export function useGithub() {
             userDetails.value = undefined;
             errorMessage.value = 'Se ha producido un error al cargar los datos';
         } finally {
-            isLoading.value = false;
+            isLoadingUserDetails.value = false;
         } 
     }
 
@@ -86,6 +87,7 @@ export function useGithub() {
         totalPages,
         errorMessage,
         isLoading,
+        isLoadingUserDetails,
 
         // methods
         getUsers,

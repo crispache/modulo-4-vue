@@ -38,7 +38,7 @@ const isShowError = ref<boolean>(false);
 
 
 // methods
-await getUsers(currentSearchField.value, currentPage.value);
+/* await getUsers(currentSearchField.value, currentPage.value); */
 
 const updatePagination = async (page: number) => {
   await getUsers(currentSearchField.value, page);

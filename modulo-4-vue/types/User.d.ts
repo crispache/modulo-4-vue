@@ -32,7 +32,6 @@ export interface UserDetails {
   followers: number;
   following: number;
 
-  company: string | null | undefined;
   email: string | null | undefined;
 
   html_url: string;

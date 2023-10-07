@@ -8,18 +8,16 @@
       </NuxtLink>
     </div>
 
-    <template v-if="isLoading">
+    <!-- Spinner -->
+    <template v-if="isLoadingUserDetails">
       <div class="spinner">
         <Spinner />
       </div>
     </template>
 
+    <!-- User Details -->
     <template v-else>
-      <template v-if="errorMessage">
-        <user-list-item-empty />
-      </template>
-
-      <template v-else>
+      <template v-if="userDetails">
         <div class="user-info">
           <div class="image">
             <v-img
@@ -41,7 +39,7 @@
 
           <div class="main-info">
             <div class="d-flex">
-              <h2> {{ getUserName }} </h2>
+              <h2>{{ getUserName }}</h2>
               <v-btn
                 size="small"
                 icon="mdi-open-in-new"
@@ -87,6 +85,10 @@
           <div v-html="userDetails?.bio"></div>
         </div>
       </template>
+
+      <template v-else>
+        <user-list-item-empty />
+      </template>
     </template>
   </div>
   <ErrorAlert
@@ -102,16 +104,24 @@ import { storeToRefs } from "pinia";
 import avatarPhotoUrl from "~/assets/images/avatar.png";
 import { useSearchStore } from "~/composables/store/useSearchStore";
 
-
+// Composable & route & store
 const route = useRoute();
 const isShowError = ref<boolean>(false);
-const { userDetails, getUserDetail, isLoading, errorMessage } = useGithub();
-
+const { userDetails, getUserDetail, isLoadingUserDetails, errorMessage } = useGithub();
 const search = useSearchStore();
 const { currentSearchField } = storeToRefs(search);
 
+onMounted(async () => {
+  const id = route.params.id as string;
+  await getUserDetail(id);
+});
 
+// Methods
+const openBrowserTabToShowGithubRepository = (): void => {
+  window.open(userDetails.value?.html_url);
+};
 
+// Computed & watch
 const getUserName = computed(() => {
   if (userDetails.value?.name && userDetails.value?.login) {
     return `${userDetails.value.name} - ${userDetails.value.login}`;
@@ -121,27 +131,10 @@ const getUserName = computed(() => {
     return `${userDetails.value.login}`;
   }
 
-  return '-'
+  return "-";
 });
 
-
-
-const getOrganizationName = computed(() => {
-  if (userDetails.value?.company) {
-    return userDetails.value.company;
-  } else {
-    return currentSearchField.value;
-  }
-});
-
-const openBrowserTabToShowGithubRepository = (): void => {
-  window.open(userDetails.value?.html_url);
-};
-
-onMounted(async () => {
-  const id = route.params.id as string;
-  await getUserDetail(id);
-});
+const getOrganizationName = computed(() => currentSearchField.value);
 
 watch(errorMessage, () => {
   if (errorMessage.value) {
