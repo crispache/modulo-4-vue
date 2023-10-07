@@ -2,7 +2,7 @@
   <section class="container">
     <UserListSearch :is-loading="isLoading" @update-list="updateList" />
 
-    <template v-if="isLoading">
+    <template v-if="isLoading || !currentIsDefaultStateLoaded">
       <div class="spinner">
         <Spinner />
       </div>
