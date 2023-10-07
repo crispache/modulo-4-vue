@@ -43,7 +43,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "update-list"): void;
+  (e: "update-list", search: string): void;
 }>();
 
 const organizationName = ref<string>();
@@ -66,21 +66,21 @@ onMounted(() => {
 // Methods
 const searchMembersOrganization = () => {
   if (organizationName.value) {
-    updateSearchField(organizationName.value)
-    emit("update-list");
+   // updateSearchField(organizationName.value); //* TODO: SE PUEDE composable
+    emit("update-list", organizationName.value);
   } else {
     isShowError.value = true;
-    resetListWithDefaultValues();
+  /*   resetListWithDefaultValues(); */ // todo: revisar
   }
 };
 
 
-const resetListWithDefaultValues = (): void => {
+/* const resetListWithDefaultValues = (): void => {
   updateSearchField("");
   updateUsersList([]);
   updatePage(1);
   updateTotalPages(0);
-};
+}; */
 </script>
 
 <style scoped lang="scss">

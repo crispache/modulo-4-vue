@@ -8,7 +8,7 @@ export function useGithub() {
     // Store
     const searchStore = useSearchStore();
     const { currentUsersList, currentPage: currentPageStore, totalPages: totalPagesStore } = storeToRefs(searchStore); 
-    const { updateTotalPages, updateUsersList, updatePage } = useSearchStore();
+    const { updateTotalPages, updateUsersList, updatePage, updateSearchField } = useSearchStore();
 
     const users = ref<ListUserInfo[]>(currentUsersList.value);
     const userDetails = ref<UserDetails | undefined>(undefined);
@@ -26,6 +26,7 @@ export function useGithub() {
 
             // TODO: ACTUALIZAR TOTAL PAGE Y ACTUALIZAR CURRENTPAGE
             updatePage(currentPage);
+            updateSearchField(organizationName);
             
             const { data, pages, error } = await githubService.getUsers(organizationName, currentPage);
           
@@ -41,7 +42,6 @@ export function useGithub() {
                 totalPages.value = pages;
                 updateTotalPages(pages)
             } 
-
 
         } catch (err) {
             users.value = [];

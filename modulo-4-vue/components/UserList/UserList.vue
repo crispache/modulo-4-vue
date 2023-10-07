@@ -1,123 +1,58 @@
 <template>
-  <section class="container">
-    <UserListSearch :is-loading="isLoading" @update-list="updateList()" />
-
-    <div class="title">
-      <h2 v-if="currentSearchField"> Miembros de {{ currentSearchField }} </h2>
-    </div>
-
-    <div class="spinner" v-if="isLoading">
-      <Spinner />
-    </div>
+  <div class="box">
+    <template v-if="users.length === 0">
+      <user-list-empty />
+    </template>
 
     <template v-else>
-      <template v-if="currentUsersList.length === 0">
-        <user-list-empty />
-      </template>
+      <div class="list">
+        <UserListItem
+          v-for="user in users"
+          :key="user.id"
+          :user-name="user.login"
+          :photo-url="user.avatar_url"
+        />
+      </div>
 
-      <template v-else>
-        <div class="list">
-          <UserListItem
-            v-for="user in currentUsersList"
-            :key="user.id"
-            :user-name="user.login"
-            :photo-url="user.avatar_url"
-          />
-        </div>
-
-        <div class="pagination">
-          <v-pagination
-            v-model:model-value="currentPage"
-            :length="totalPages"
-            :total-visible="7"
-            @update:model-value="updatePagination()"
-          ></v-pagination>
-        </div>
-      </template>
+      <div class="pagination">
+        <v-pagination
+          v-model:model-value="page"
+          :length="totalPages"
+          :total-visible="7"
+          @update:model-value="$emit('update-pagination', page)"
+        ></v-pagination>
+      </div>
     </template>
-  </section>
-
-  <ErrorAlert
-    :is-open="isShowError"
-    :error-message="errorMessage"
-    @close-alert="isShowError = false"
-  >
-  </ErrorAlert>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { useSearchStore } from "~/composables/store/useSearchStore";
+import { ListUserInfo } from "~/types/User";
 
-const { getUsers, users, isLoading, errorMessage } = useGithub();
-const search = useSearchStore();
-const { updatePage, updateSearchField, updateUsersList, updateTotalPages, totalPages } = useSearchStore();
-const { currentSearchField, currentUsersList, totalPages: totalPagesStore, currentPage: currentPageStore } = storeToRefs(search);
+// Pros & emits
+const props = defineProps<{
+  users: ListUserInfo[];
+  currentPage: number;
+  totalPages: number;
+}>();
 
-const isShowError = ref<boolean>(false);
-const currentPage = ref<number>(1);
-/* const totalPages = ref<number>() */
+const emit = defineEmits<{
+  (e: "update-pagination", page: number): void;
+}>();
 
-onMounted( ()=> {
-  currentPage.value = currentPageStore.value;
- /*  totalPages.value = totalPagesStore.value; */
-});
-
-// methods
-const updatePagination = async () => {
-  updatePage(currentPage.value);
-  await getUsers(currentSearchField.value, currentPage.value);
-};
-
-const updateList = async () => {
-  currentPage.value = 1;
-  updatePage(currentPage.value);
-  await getUsers(currentSearchField.value, currentPage.value);
-};
-
-const resetListWithDefaultValues = (): void => {
-  updateUsersList([]);
-  currentPage.value = 1;
-  updatePage(currentPage.value);
-  updateTotalPages(0);
-};
-
-
-// watch
-watch(errorMessage, () => {
-  if (errorMessage.value) {
-    isShowError.value = true;
-    resetListWithDefaultValues();
-  }
-});
+const page = ref<number>(props.currentPage);
 </script>
 
 <style scoped lang="scss">
-.container {
-  height: 50vh;
-  padding: 20px;
-
-  .title {
-    margin-bottom: 15px;
-    height: 50px;
-  }
-
+.box {
   .list {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
   }
-
   .pagination {
     margin: 0 auto;
     padding: 20px 0px;
-  }
-
-  .spinner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px;
   }
 }
 </style>
