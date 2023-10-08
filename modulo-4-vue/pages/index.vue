@@ -35,13 +35,10 @@ const { currentSearchField, currentPage, totalPages, currentIsDefaultStateLoaded
 const { updateDefaultState } = useSearchStore()
 const isShowError = ref<boolean>(false);
 
-
-onMounted( async () => {
-  if(!currentIsDefaultStateLoaded.value) {
-    updateDefaultState(true);
-    await getUsers(currentSearchField.value, currentPage.value); 
-  }
-})
+if(!currentIsDefaultStateLoaded.value) {
+  updateDefaultState(true);
+  await getUsers(currentSearchField.value, currentPage.value); 
+}
 
 // methods
 const updatePagination = async (page: number) => {

@@ -9,11 +9,11 @@ export const useSearchStore = defineStore('search', () => {
     const totalPages = ref<number>(0);
 
 
-    const currentIsDefaultStateLoaded  = computed(() => isDefaultStateLoaded.value )
-    const currentSearchField = computed(() => searchField.value )
-    const currentUsersList = computed(() => usersList.value )
-    const currentPage = computed(() => page.value )
-    const currentTotalPages = computed(() => totalPages.value )
+    const currentIsDefaultStateLoaded = computed(() => isDefaultStateLoaded.value)
+    const currentSearchField = computed(() => searchField.value)
+    const currentUsersList = computed(() => usersList.value)
+    const currentPage = computed(() => page.value)
+    const currentTotalPages = computed(() => totalPages.value)
 
 
     const updateDefaultState = (state: boolean) => {
@@ -25,7 +25,7 @@ export const useSearchStore = defineStore('search', () => {
     }
 
     const updateUsersList = (newUsersList: ListUserInfo[]) => {
-        usersList.value = [... newUsersList]
+        usersList.value = [...newUsersList]
     }
 
     const updatePage = (newPage: number) => {
@@ -50,9 +50,9 @@ export const useSearchStore = defineStore('search', () => {
         currentIsDefaultStateLoaded,
         currentSearchField,
         currentUsersList,
-        currentPage, 
+        currentPage,
         currentTotalPages,
-     
+
         // actions
         updateDefaultState,
         updateSearchField,
@@ -61,4 +61,8 @@ export const useSearchStore = defineStore('search', () => {
         updateTotalPages,
     }
 
-},{ persist: false}) // TODO: REVISAR
+}, {
+    persist: {
+        storage: persistedState.localStorage,
+    }
+})
