@@ -22,8 +22,12 @@ Mostrar un listado de miembros que pertenencen a una organización en Github. Pa
 - Añadir tests unitarios de componentes de Vue o composables.
 
 
+### Para usar las APIS
+Crear un token personal en Github y añadirlo en un fichero .env en la raíz del proyecto
 
-
+```env
+GITHUB_TOKEN=
+```
 
 ## Setup
 
