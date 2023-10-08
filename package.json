@@ -6,11 +6,16 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest --config vitest.config.mjs"
   },
   "keywords": [
     "vue",
-    "nuxt"
+    "nuxt",
+    "vuetify",
+    "pinia",
+    "vitest",
+    "typescript"
   ],
   "overrides": {
     "vue": "latest"
@@ -18,8 +23,12 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@pinia-plugin-persistedstate/nuxt": "^1.1.2",
+    "@testing-library/vue": "^7.0.0",
+    "happy-dom": "^12.9.0",
     "nuxt": "^3.7.3",
+    "nuxt-vitest": "^0.11.0",
     "sass": "^1.67.0",
+    "vitest": "^0.33.0",
     "vuetify": "^3.3.13"
   },
   "dependencies": {
