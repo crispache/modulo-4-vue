@@ -18,7 +18,10 @@
 </template>
 
 <script setup lang="ts">
-  const props = defineProps<{ isOpen: boolean; errorMessage: string }>();
+  const props = withDefaults(defineProps<{ isOpen: boolean; errorMessage?: string }>(), {
+    isOpen: false,
+    errorMessage: "Se ha producido un error. Por favor, inténtelo de nuevo más tarde. Gracias."
+  });
   const emit = defineEmits<{
     (close: "close-alert"): void;
   }>();
